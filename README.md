@@ -1,4 +1,4 @@
-# 日本語の指示を解釈し、走行パターンを切り替えるロボット
+# 日本語の指示を解釈し、走行を変更するロボット
 
 既存のUbuntu 22.04 / ROS 2 Humble / Gazebo Fortress環境に追加した。
 ローカルモデルQwen2.5 1.5BをOllamaで実際に推論し、
@@ -26,19 +26,15 @@
 
 `teleop_node.cpp`、`world.sdf`、`nav_teleop.yaml`、`CMakeLists.txt`、
 `package.xml`は変更なし。
-Pythonを直接起動するため、CMakeへの実行ファイル追加やpip導入は不要です。
+Pythonを直接起動するため、CMakeへの実行ファイル追加やpip導入は不要。
 既存CMakeの `install(DIRECTORY launch config models ...)` が新launchを配置。
 
-重要: AIデモ中は元の `nav_teleop.launch.py` を実行しない。
-手動ノードは入力なしでもゼロ速度を繰り返し送るため、AIの指令と競合。
 
 ## 1 AIの環境準備 Windows PowerShellの場合
 
 ローカルの環境で、コンテナ名が異なる場合は `pai_ros2` を実際の名前に置換すること。
-Docker Desktopは起動済みとします。ネットワークとAIコンテナを追加するだけで、
-既存ROSコンテナは作り直しません。
 
-初回のみ、順番に実行すること。各行でエラーがあれば止まって確認。
+初回のみ、順番に実行すること。
 
 ```powershell
 docker start pai_ros2
@@ -182,7 +178,7 @@ python3 ~/fortress_ws/src/nav_dev/scripts/ai_commander.py "少しバックして
 ## 6 推論の証拠と評価
 
 `~/fortress_ws/demo_logs/*.json` に指示、モデル、推論時間、
-AIの生レスポンス、実行した計画、指令送信の状態を保存。
+AIのレスポンス、実行した計画、指令送信の状態を保存。
 推論失敗時の固定fallbackはなく、その場合はエラー表示で終了。
 `planned`は推論だけ、`cancelled`は実行中止、
 `commands_completed`は指令送信完了。
